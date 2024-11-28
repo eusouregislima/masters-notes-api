@@ -1,7 +1,9 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
+import { Types } from 'mongoose';
 import { z } from 'zod';
 import { Article } from '../../../database/models/article';
-import { NotFoundError } from '../../../errors/not-found-error';
+import { ForbiddenError } from '../../../errors/forbidden-error';
+import { findArticleById } from './find';
 
 export async function remove(request: FastifyRequest, reply: FastifyReply) {
 	const schema = z.object({
@@ -10,12 +12,17 @@ export async function remove(request: FastifyRequest, reply: FastifyReply) {
 
 	const params = schema.parse(request.params);
 
-	const findArticle = await Article.findById(params.id);
+	const article = await findArticleById(params.id);
 
-	if (!findArticle) {
-		throw new NotFoundError('Article does not exists.');
+	//TODO use logged user
+	const user = {
+		_id: new Types.ObjectId(),
+		name: 'Regis Lima',
+	};
+
+	if (String(article.author?._id) !== user._id.toString()) {
+		throw new ForbiddenError('This article is from another author.');
 	}
-
 	await Article.findByIdAndDelete(params.id);
 
 	return reply.status(204).send();

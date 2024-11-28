@@ -3,7 +3,6 @@ import { Types } from 'mongoose';
 import slugify from 'slugify';
 import { z } from 'zod';
 import { Article } from '../../../database/models/article';
-import { AppError } from '../../../errors/app-error';
 import { BadRequestError } from '../../../errors/bad-request-error';
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
@@ -27,6 +26,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
 		trim: true,
 	});
 
+	//TODO use logged user
 	const author = {
 		_id: new Types.ObjectId(),
 		name: 'Regis Lima',
