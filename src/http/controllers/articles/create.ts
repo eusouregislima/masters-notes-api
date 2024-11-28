@@ -7,8 +7,6 @@ import { AppError } from '../../../errors/app-error';
 import { BadRequestError } from '../../../errors/bad-request-error';
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
-	//TODO validar dados de entrada do usuário
-
 	const schema = z.object({
 		title: z.string().max(255),
 		subtitle: z.string().max(500),
@@ -42,12 +40,8 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
 		throw new BadRequestError('Article title already exists.');
 	}
 
-	console.log(findArticle);
-
-	// TODO verificar se slug já foi criado
-
 	const createdArticle = await Article.create({
-		slug: uniqueSlug, //TODO melhorar hash do slug
+		slug: uniqueSlug,
 		title,
 		subtitle,
 		content,
