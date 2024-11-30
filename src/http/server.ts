@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import cors from '@fastify/cors';
 import fastifyJwt from '@fastify/jwt';
 import fastify from 'fastify';
 import { ZodError } from 'zod';
@@ -19,6 +20,9 @@ setupMongo()
 			},
 		});
 
+		app.register(cors, {
+			origin: true,
+		});
 		app.register(authRoutes);
 		app.register(usersRoutes);
 		app.register(articlesRoutes);

@@ -13,7 +13,7 @@ export async function list(request: FastifyRequest, reply: FastifyReply) {
 
 	const { title, tags, page } = filters;
 
-	const pageLimit = 3;
+	const pageLimit = 20;
 	const pageNumber = page ?? 1;
 	const offset = pageLimit * (pageNumber - 1);
 
